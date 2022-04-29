@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+package com.example;
+
+option java_outer_classname = "RecyclingMachineApi";
+
+message RecycleCansRequest {
+  string machine_id = 1 [(kalix.field).entity_key = true];
+  int32 cans = 2;
+}
+
+message GetMachineStateRequest {
+  string machine_id = 1 [(kalix.field).entity_key = true];
+}
+
+message MachineState {
+  int32 cans = 1;
+}
+
+service RecyclingMachine {
+
+  option (kalix.codegen) = {
+    value_entity: {
+      name: "com.example.RecyclingMachineEntity"
+      entity_type: "recycling_machine"
+      state: "com.example.MachineState"
+    }
+  };
+
+  rpc RecycleCans(RecycleCansRequest) returns (google.protobuf.Empty) {}
+  rpc GetMachineState(GetMachineStateRequest) returns (MachineState) {}
+
+}
+
